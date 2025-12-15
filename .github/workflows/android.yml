@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
@@ -37,22 +37,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Accept Android licenses & install SDK tools
-        run: |
-          SDK="$HOME/.buildozer/android/platform/android-sdk"
-
-          if [ -f "$SDK/tools/bin/sdkmanager" ]; then
-            SDKMANAGER="$SDK/tools/bin/sdkmanager"
-          else
-            SDKMANAGER="$SDK/cmdline-tools/latest/bin/sdkmanager"
-          fi
-
-          echo "Using sdkmanager at: $SDKMANAGER"
-
-          yes | "$SDKMANAGER" --licenses
-          "$SDKMANAGER" "platform-tools" "platforms;android-33" "build-tools;36.1.0"
-
-      - name: Build APK
+      - name: Build APK (this installs SDK automatically)
         run: |
           buildozer android debug
 
