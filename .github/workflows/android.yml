@@ -27,6 +27,9 @@ jobs:
             libncurses5 \
             libstdc++6 \
             zlib1g
+      - name: Accept Android SDK licenses
+        run: |
+          yes | /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
 
       - name: Install Buildozer
         run: |
