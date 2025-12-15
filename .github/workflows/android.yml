@@ -22,10 +22,16 @@ jobs:
           sudo apt update
           sudo apt install -y \
             zip unzip openjdk-17-jdk \
-            libncurses6 libstdc++6 \
-            python3-pip python3-setuptools \
-            python3-wheel python3-venv \
-            autoconf automake libtool pkg-config
+            autoconf automake libtool pkg-config \
+            libncurses6 libstdc++6
+
+      - name: Install Android SDK Build Tools
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-31" \
+            "build-tools;31.0.0"
 
       - name: Install Buildozer
         run: |
