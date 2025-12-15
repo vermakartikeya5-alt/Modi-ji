@@ -35,29 +35,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Set Android environment variables
-        run: |
-          echo "ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_NDK_HOME=$HOME/.buildozer/android/platform/android-ndk-r25b" >> $GITHUB_ENV
-          echo "PATH=$HOME/.buildozer/android/platform/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
-          echo "PATH=$HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Initialize Buildozer
+      - name: Initialize Buildozer (download SDK/NDK)
         run: |
           buildozer init || true
+          buildozer android p4a -- --help || true
 
-      - name: Accept Android licenses and install SDK tools
+      - name: Accept Android licenses & install tools
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "build-tools;36.1.0" "platforms;android-33"
+          SDK=$HOME/.buildozer/android/platform/android-sdk
+          yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses
+          $SDK/cmdline-tools/latest/bin/sdkmana
 
-      - name: Build APK (debug)
-        run: |
-          buildozer -v android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: bin/*.apk
