@@ -7,7 +7,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+   runs-on: ubuntu-22.04
+
 
     steps:
       - name: Checkout repo
@@ -62,4 +63,5 @@ jobs:
         with:
           name: flappybird-apk
           path: bin/*.apk
+
 
