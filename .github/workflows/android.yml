@@ -40,9 +40,17 @@ jobs:
           buildozer init || true
           buildozer android p4a -- --help || true
 
-      - name: Accept Android licenses & install tools
+          - name: Accept Android licenses & install tools
         run: |
           SDK=$HOME/.buildozer/android/platform/android-sdk
-          yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses
-          $SDK/cmdline-tools/latest/bin/sdkmana
+          TOOLS_DIR=$(ls $SDK/cmdline-tools | sort -V | tail -n 1)
+
+          echo "Using cmdline-tools version: $TOOLS_DIR"
+
+          yes | $SDK/cmdline-tools/$TOOLS_DIR/bin/sdkmanager --licenses
+
+          $SDK/cmdline-tools/$TOOLS_DIR/bin/sdkmanager \
+            "platform-tools" \
+            "platforms;android-33" \
+            "build-tools;36.1.0"
 
