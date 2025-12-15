@@ -36,19 +36,21 @@ jobs:
           pip install buildozer cython virtualenv
 
       - name: Accept Android licenses & install SDK tools
-        run: |
-          SDK=$HOME/.buildozer/android/platform/android-sdk
+  run: |
+    SDK=$HOME/.buildozer/android/platform/android-sdk
 
-          # Find latest cmdline-tools folder
-          TOOLS_DIR=$(ls $SDK/cmdline-tools | sort -V | tail -n 1)
-          echo "Using cmdline-tools version: $TOOLS_DIR"
+    if [ -f "$SDK/tools/bin/sdkmanager" ]; then
+      SDKMANAGER="$SDK/tools/bin/sdkmanager"
+    else
+      SDKMANAGER="$SDK/cmdline-tools/latest/bin/sdkmanager"
+    fi
 
-          yes | $SDK/cmdline-tools/$TOOLS_DIR/bin/sdkmanager --licenses
+    echo "Using sdkmanager at: $SDKMANAGER"
 
-          $SDK/cmdline-tools/$TOOLS_DIR/bin/sdkmanager \
-            "platform-tools" \
-            "platforms;android-33" \
-            "build-tools;36.1.0"
+    yes | $SDKMANAGER --licenses
+
+    $SDKMANAGER "platform-tools" "platforms;android-33" "build-tools;36.1.0"
+
 
       - name: Build APK
         run: |
